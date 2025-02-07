@@ -11,9 +11,22 @@ specify the required variables and run the command `terraform init`.
 
 ```hcl
 module "gitlab_group_access_token" {
-  source = "git::ssh://git@gitlab.com:terraform-child-modules-48151/terraform-gitlab-group_access_token.git"
+  source  = "gitlab.com/terraform-child-modules-48151/terraform-gitlab-group-access-token/local"
+  version = "1.0.0"
+
+  group  = "example-group-48165"
+  name   = "example-access-token"
+  scopes = ["read_api"]
+
+  rotation_configuration = {
+    expiration_days    = 365
+    rotate_before_days = 7
+  }
 }
 ```
+
+:warning: This feature requires a Premium / Ultimate license or self-managed
+instance.
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
@@ -25,7 +38,9 @@ module "gitlab_group_access_token" {
 
 ## Providers
 
-No providers.
+| Name | Version |
+|------|---------|
+| <a name="provider_gitlab"></a> [gitlab](#provider\_gitlab) | ~> 17.0 |
 
 ## Modules
 
@@ -33,15 +48,31 @@ No modules.
 
 ## Resources
 
-No resources.
+| Name | Type |
+|------|------|
+| [gitlab_group_access_token.this](https://registry.terraform.io/providers/gitlabhq/gitlab/latest/docs/resources/group_access_token) | resource |
 
 ## Inputs
 
-No inputs.
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| <a name="input_access_level"></a> [access\_level](#input\_access\_level) | The access level for the group access token | `string` | `"maintainer"` | no |
+| <a name="input_expires_at"></a> [expires\_at](#input\_expires\_at) | When the token will expire, YYYY-MM-DD format | `string` | `null` | no |
+| <a name="input_group"></a> [group](#input\_group) | The ID or full path of the group | `string` | n/a | yes |
+| <a name="input_name"></a> [name](#input\_name) | The name of the group access token | `string` | n/a | yes |
+| <a name="input_rotation_configuration"></a> [rotation\_configuration](#input\_rotation\_configuration) | The configuration for when to rotate a token automatically | ```object( { expiration_days = optional(number) rotate_before_days = optional(number) } )``` | `{}` | no |
+| <a name="input_scopes"></a> [scopes](#input\_scopes) | The scopes of the group access token | `list(string)` | n/a | yes |
 
 ## Outputs
 
-No outputs.
+| Name | Description |
+|------|-------------|
+| <a name="output_active"></a> [active](#output\_active) | True if the token is active |
+| <a name="output_created_at"></a> [created\_at](#output\_created\_at) | Time the token has been created, RFC3339 format |
+| <a name="output_id"></a> [id](#output\_id) | The ID of the group access token |
+| <a name="output_revoked"></a> [revoked](#output\_revoked) | True if the token is revoked |
+| <a name="output_token"></a> [token](#output\_token) | The token of the group access token |
+| <a name="output_user_id"></a> [user\_id](#output\_user\_id) | The user\_id associated to the token |
 <!-- END_TF_DOCS -->
 
 ## Authors
