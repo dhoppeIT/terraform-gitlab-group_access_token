@@ -4,6 +4,7 @@ resource "gitlab_group_access_token" "this" {
   scopes = var.scopes
 
   access_level = var.access_level
+  description  = var.description
   expires_at   = var.expires_at
 
   rotation_configuration = {

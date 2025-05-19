@@ -29,6 +29,12 @@ variable "access_level" {
   }
 }
 
+variable "description" {
+  type        = string
+  default     = null
+  description = "The description of the group access token"
+}
+
 variable "expires_at" {
   type        = string
   default     = null
