@@ -12,7 +12,7 @@ specify the required variables and run the command `terraform init`.
 ```hcl
 module "gitlab_group_access_token" {
   source  = "gitlab.com/terraform-child-modules-48151/terraform-gitlab-group-access-token/local"
-  version = "1.0.0"
+  version = "1.1.0"
 
   group  = "example-group-48165"
   name   = "example-access-token"
@@ -63,6 +63,7 @@ No modules.
 | <a name="input_name"></a> [name](#input\_name) | The name of the group access token | `string` | n/a | yes |
 | <a name="input_rotation_configuration"></a> [rotation\_configuration](#input\_rotation\_configuration) | The configuration for when to rotate a token automatically | ```object( { expiration_days = optional(number) rotate_before_days = optional(number) } )``` | `{}` | no |
 | <a name="input_scopes"></a> [scopes](#input\_scopes) | The scopes of the group access token | `list(string)` | n/a | yes |
+| <a name="input_validate_past_expiration_date"></a> [validate\_past\_expiration\_date](#input\_validate\_past\_expiration\_date) | Wether to validate if the expiration date is in the future | `bool` | `null` | no |
 
 ## Outputs
 
