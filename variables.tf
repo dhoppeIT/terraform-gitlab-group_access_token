@@ -9,13 +9,13 @@ variable "name" {
 }
 
 variable "scopes" {
-  type        = list(string)
+  type        = set(string)
   description = "The scopes of the group access token"
 
-  # validation {
-  #   condition     = contains(["api", "read_api", "read_registry", "write_registry", "read_repository", "write_repository", "create_runner", "manage_runner", "ai_features", "k8s_proxy", "read_observability", "write_observability"], var.scopes)
-  #   error_message = "Valid values are api, read_api, read_registry, write_registry, read_repository, write_repository, create_runner, manage_runner, ai_features, k8s_proxy, read_observability, write_observability"
-  # }
+  validation {
+    condition     = alltrue([for s in var.scopes : contains(["api", "read_api", "read_registry", "write_registry", "read_virtual_registry", "write_virtual_registry", "read_repository", "write_repository", "create_runner", "manage_runner", "ai_features", "k8s_proxy", "read_observability", "write_observability", "self_rotate"], s)])
+    error_message = "Valid values are api, read_api, read_registry, write_registry, read_virtual_registry, write_virtual_registry, read_repository, write_repository, create_runner, manage_runner, ai_features, k8s_proxy, read_observability, write_observability, self_rotate"
+  }
 }
 
 variable "access_level" {
@@ -24,8 +24,8 @@ variable "access_level" {
   description = "The access level for the group access token"
 
   validation {
-    condition     = contains(["no one", "minimal", "guest", "reporter", "developer", "maintainer", "owner"], var.access_level)
-    error_message = "Valid values are no one, minimal, guest, reporter, developer, maintainer, owner"
+    condition     = contains(["no one", "minimal", "guest", "planner", "reporter", "developer", "maintainer", "owner"], var.access_level)
+    error_message = "Valid values are no one, minimal, guest, planner, reporter, developer, maintainer, owner"
   }
 }
 
@@ -44,16 +44,16 @@ variable "expires_at" {
 variable "rotation_configuration" {
   type = object(
     {
-      expiration_days    = optional(number)
-      rotate_before_days = optional(number)
+      expiration_days    = number
+      rotate_before_days = number
     }
   )
-  default     = {}
-  description = "The configuration for when to rotate a token automatically"
+  default     = null
+  description = "The configuration for when to rotate a token automatically. Will not rotate a token until terraform apply is run."
 }
 
 variable "validate_past_expiration_date" {
   type        = bool
   default     = null
-  description = "Wether to validate if the expiration date is in the future"
+  description = "Whether to validate if the expiration date is in the future"
 }
